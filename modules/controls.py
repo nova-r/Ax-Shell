@@ -122,18 +122,18 @@ class BrightnessSlider(Scale):
 
     def on_scroll(self, widget, event):
         current_value = self.get_value()
-        step_size = 1
+        step_size = 60
         if event.direction == Gdk.ScrollDirection.SMOOTH:
-            if event.delta_y < 0:
+            if event.delta_y > 0:
                 new_value = min(current_value + step_size, self.client.max_screen)
-            elif event.delta_y > 0:
+            elif event.delta_y < 0:
                 new_value = max(current_value - step_size, 0)
             else:
                 return False
         else:
-            if event.direction == Gdk.ScrollDirection.UP:
+            if event.direction == Gdk.ScrollDirection.DOWN:
                 new_value = min(current_value + step_size, self.client.max_screen)
-            elif event.direction == Gdk.ScrollDirection.DOWN:
+            elif event.direction == Gdk.ScrollDirection.UP:
                 new_value = max(current_value - step_size, 0)
             else:
                 return False
@@ -190,11 +190,11 @@ class BrightnessSmall(Box):
         if self.brightness.max_screen == -1:
             return
 
-        step_size = 5
+        step_size = 100
         current_norm = self.progress_bar.value
-        if event.delta_y < 0:
+        if event.delta_y > 0:
             new_norm = min(current_norm + (step_size / self.brightness.max_screen), 1)
-        elif event.delta_y > 0:
+        elif event.delta_y < 0:
             new_norm = max(current_norm - (step_size / self.brightness.max_screen), 0)
         else:
             return
@@ -285,9 +285,9 @@ class VolumeSmall(Box):
             return
         if event.direction == Gdk.ScrollDirection.SMOOTH:
             if abs(event.delta_y) > 0:
-                self.audio.speaker.volume -= event.delta_y
+                self.audio.speaker.volume += event.delta_y
             if abs(event.delta_x) > 0:
-                self.audio.speaker.volume += event.delta_x
+                self.audio.speaker.volume -= event.delta_x
 
     def on_speaker_changed(self, *_):
         if not self.audio.speaker:
@@ -355,9 +355,9 @@ class MicSmall(Box):
             return
         if event.direction == Gdk.ScrollDirection.SMOOTH:
             if abs(event.delta_y) > 0:
-                self.audio.microphone.volume -= event.delta_y
+                self.audio.microphone.volume += event.delta_y
             if abs(event.delta_x) > 0:
-                self.audio.microphone.volume += event.delta_x
+                self.audio.microphone.volume -= event.delta_x
 
     def on_microphone_changed(self, *_):
         if not self.audio.microphone:
