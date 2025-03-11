@@ -25,6 +25,6 @@
   all: unset;
   color: var(--foreground);
   font-size: 11pt;
-  font-family: "Zed Sans";
+  font-family: "Zed Mono";
   border-radius: 16px;
 }
