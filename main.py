@@ -1,5 +1,6 @@
 import setproctitle
 import os
+import shutil
 from fabric import Application
 from fabric.utils import get_relative_path, exec_shell_command_async
 from modules.bar import Bar
@@ -14,7 +15,12 @@ if __name__ == "__main__":
     setproctitle.setproctitle(data.APP_NAME)
 
     if not os.path.isfile(data.CONFIG_FILE):
-        exec_shell_command_async(f"python {get_relative_path('../config/config.py')}")
+        exec_shell_command_async(f"python {os.path.expanduser(f"~/.config/Ax-Shell/config/config.py")}")
+
+    current_wall = os.path.expanduser("~/.current.wall")
+    if not os.path.exists(current_wall):
+        shutil.copyfile(os.path.expanduser(f"~/.config/{data.APP_NAME_CAP}/assets/wallpapers_example/example-1.jpg"), os.path.expanduser(f"~/.current.wall"))
+
     corners = Corners()
     bar = Bar()
     notch = Notch()
