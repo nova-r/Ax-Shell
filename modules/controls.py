@@ -243,10 +243,10 @@ class BrightnessSmall(Box):
 class VolumeSmall(Box):
     def __init__(self, **kwargs):
         super().__init__(name="button-bar-vol", **kwargs)
-        self.audio = Audio()
+        self.audio = Audio(max_volume=200)
         self.progress_bar = CircularProgressBar(
             name="button-volume", size=28, line_width=2,
-            start_angle=150, end_angle=390,
+            start_angle=150, end_angle=390, max_value=2.0,
         )
         self.vol_label = Label(name="vol-label", markup=icons.vol_high)
         self.vol_button = Button(on_clicked=self.toggle_mute, child=self.vol_label)
