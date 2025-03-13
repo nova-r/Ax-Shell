@@ -1,4 +1,4 @@
-:vars {
+:root {
   --foreground: {{colors.on_background.default.hex}};
   --background: {{colors.background.default.hex}};
   --cursor: {{colors.on_background.default.hex}};
