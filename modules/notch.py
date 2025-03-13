@@ -37,6 +37,9 @@ class Notch(Window):
             all_visible=True,
         )
 
+        self.visible = False
+        self.force_close = False
+        
         self.bar = kwargs.get("bar", None)
 
         # Primero inicializamos NotificationContainer
@@ -134,8 +137,7 @@ class Notch(Window):
             ]
         )
 
-        
-
+        self.stack.connect("notify::visible-child", self.on_visible_child_changed)
         self.corner_left = Box(
             name="notch-corner-left",
             orientation="v",
@@ -160,13 +162,17 @@ class Notch(Window):
 
         self.corner_right.set_margin_end(56)
 
+        self.event_box = EventBox()
+        self.event_box.add(self.stack)
+        self.event_box.connect("leave-notify-event", lambda widget, event: (self.close_if_desired(), False)[1])
+
         self.notch_box = CenterBox(
             name="notch-box",
             orientation="h",
             h_align="center",
             v_align="center",
             # start_children=self.corner_left,
-            center_children=self.stack,
+            center_children=self.event_box,
             # end_children=self.corner_right,
         )
 
@@ -199,16 +205,13 @@ class Notch(Window):
             ]
         )
 
-        self.event_box = EventBox()
-        self.event_box.add(self.notch_overlay)
-        self.event_box.connect("leave-notify-event", lambda widget, event: (self.close_notch(), False)[1])
 
         self.notch_complete = Box(
             name="notch-complete",
             orientation="v",
             children=[
                 self.boxed_notification_revealer,
-                self.event_box,
+                self.notch_overlay,
             ]
         )
 
@@ -225,11 +228,19 @@ class Notch(Window):
         self.add_keybinding("Ctrl Tab", lambda *_: self.dashboard.go_to_next_child())
         self.add_keybinding("Ctrl Shift ISO_Left_Tab", lambda *_: self.dashboard.go_to_previous_child())
 
+    def on_visible_child_changed(self, stack, param):
+        self.visible = stack.get_visible_child()
+
+    def close_if_desired(self):
+        print(type(self.visible))
+        if type(self.visible) is Dashboard:
+            self.close_notch()
+
     def on_button_enter(self, widget, event):
         window = widget.get_window()
         if window:
             window.set_cursor(Gdk.Cursor(Gdk.CursorType.HAND2))
-            if not self.force_close:
+            if not self.force_close and not self._is_notch_open:
                 self.open_notch("dashboard")
 
     def on_button_leave(self, widget, event):
