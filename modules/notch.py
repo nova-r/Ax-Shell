@@ -210,8 +210,8 @@ class Notch(Window):
             name="notch-complete",
             orientation="v",
             children=[
-                self.boxed_notification_revealer,
                 self.notch_overlay,
+                self.boxed_notification_revealer,
             ]
         )
 
