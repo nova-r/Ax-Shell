@@ -61,6 +61,7 @@ class WallpaperSelector(Box):
         # Hide text column so only the image is shown
         self.viewport.set_text_column(-1)
         self.viewport.set_item_width(0)
+        self.viewport.set_activate_on_single_click(True)
         self.viewport.connect("item-activated", self.on_wallpaper_selected)
 
         self.scrolled_window = ScrolledWindow(
