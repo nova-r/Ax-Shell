@@ -110,10 +110,6 @@ mic_mute: str = "&#xed16;"
 # Overview
 circle_plus: str = "&#xea69;"
 
-# Pins
-copy_plus: str = "&#xfdae;"
-paperclip: str = "&#xeb02;"
-
 # Confirm
 accept: str = "&#xea5e;"
 cancel: str = "&#xeb55;"

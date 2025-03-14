@@ -14,7 +14,6 @@ from gi.repository import GLib, Gtk, Pango, GdkPixbuf
 import modules.icons as icons
 from modules.buttons import Buttons
 from modules.widgets import Widgets
-from modules.pins import Pins
 from modules.wallpapers import WallpaperSelector
 from modules.kanban import Kanban
 import config.data as data
@@ -35,7 +34,6 @@ class Dashboard(Box):
         self.notch = kwargs["notch"]
 
         self.widgets = Widgets(notch=self.notch)
-        self.pins = Pins()
         self.kanban = Kanban()
         self.wallpapers = WallpaperSelector()
 
@@ -55,11 +53,6 @@ class Dashboard(Box):
             label="Widgets",
         )
 
-        self.label_2 = Label(
-            name="label-2",
-            label="Pins",
-        )
-
         self.label_3 = Label(
             name="label-3",
             label="Kanban",
@@ -71,7 +64,6 @@ class Dashboard(Box):
         )
 
         self.stack.add_titled(self.widgets, "widgets", "Widgets")
-        self.stack.add_titled(self.pins, "pins", "Pins")
         self.stack.add_titled(self.kanban, "kanban", "Kanban")
         self.stack.add_titled(self.wallpapers, "wallpapers", "Wallpapers")
 
