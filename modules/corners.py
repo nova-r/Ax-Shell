@@ -52,7 +52,7 @@ class Corners(Window):
                     orientation="h",
                     h_align="fill",
                     children=[
-                        # MyCorner("bottom-left"),
+                        MyCorner("bottom-left"),
                         Box(h_expand=True),
                         # MyCorner("bottom-right"),
                     ],
