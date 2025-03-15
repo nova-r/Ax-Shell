@@ -120,7 +120,6 @@ class BluetoothConnections(Box):
         self.client.notify("enabled")
 
     def status_label(self):
-        print(self.client.enabled)
         if self.client.enabled:
             self.bt_status_text.set_label("Enabled")
             for i in [self.bt_status_button, self.bt_status_text, self.bt_icon, self.bt_label, self.bt_menu_button, self.bt_menu_label]:

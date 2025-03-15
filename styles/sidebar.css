@@ -1,0 +1,55 @@
+#sidebar-inner.hidden {
+  margin-left: -40px;
+  opacity: 0;
+}
+
+#sidebar-inner {
+  margin: 8px;
+  opacity: 1;
+  transition: all 0.5s cubic-bezier(0.5, 0.25, 0, 1);
+}
+
+.button-sidebar {
+  padding: 4px;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 16px;
+  background-color: var(--shadow);
+  transition: all 0.1s ease;
+}
+
+.button-sidebar-label {
+  color: var(--primary);
+  font-size: 20px;
+  padding: 4px;
+  border-radius: 12px;
+  transition: all 0.1s ease;
+}
+
+.button-sidebar:hover .button-sidebar-label {
+  background-color: var(--surface_bright);
+}
+
+.button-sidebar:active .button-sidebar-label {
+  color: var(--shadow);
+  background-color: var(--primary);
+}
+
+#vpn-button-label {
+  color: var(--green)
+}
+
+#downloads-button-label {
+  color: var(--primary)
+}
+
+#downloads-circle {
+  color: var(--surface-bright);
+  border: 3px solid var(--primary);
+  margin-right: -26px;
+}
+
+#downloads-circle.hidden {
+  color: transparent;
+  border: 0px;
+}
