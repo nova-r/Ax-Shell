@@ -61,6 +61,14 @@ charging: str = "&#xefef;"
 discharging: str = "&#xefe9;"
 alert: str = "&#xefb4;"
 
+battery_1: str = "&#xea2f;"
+battery_2: str = "&#xea30;"
+battery_3: str = "&#xea31;"
+battery_4: str = "&#xea32;"
+battery_0: str = "&#xea34;"
+battery_warning: str = "&#xff1d;"
+battery_charging: str = "&#xea33;"
+
 # Applets
 wifi_0: str = "&#xeba3;"
 wifi_1: str = "&#xeba4;"

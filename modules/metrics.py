@@ -69,15 +69,21 @@ class BatteryProvider:
             if self.percent <= 15:
                 self.icon = icons.alert
             else:
-                if self.charging == False:
-                    self.icon = icons.discharging
-                elif self.percent == 100:
-                    self.icon = icons.battery
-                elif self.charging == True:
-                    self.icon = icons.charging
+                if self.charging == True:
+                    self.icon = icons.battery_charging
+                elif self.percent >= 90:
+                    self.icon = icons.battery_4
+                elif self.percent >= 50:
+                    self.icon = icons.battery_3
+                elif self.percent >= 30:
+                    self.icon = icons.battery_2
+                elif self.percent >= 10:
+                    self.icon = icons.battery_4
+                elif self.percent < 10:
+                    self.icon = icons.battery_warning
                 else:
                     # charging can be None, so this is the fallback
-                    self.icon = icons.battery
+                    self.icon = icons.battery_0
 
         return True
 
