@@ -41,9 +41,8 @@ class AriaProvider():
             # If no active downloads, output 0
             if progress is None:
                 self.progress = 0
-                return True
-
-            self.progress = progress
+            else:
+                self.progress = progress
 
         else:
             print("Error fetching data")
