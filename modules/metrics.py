@@ -239,7 +239,7 @@ class Metrics(Box):
         percentage = int(value * 100)
         self.battery_label.set_markup(icon)
 
-        if percentage <= 15:
+        if percentage <= 15 and not charging:
             self.battery_label.add_style_class("alert")
         else:
             self.battery_label.remove_style_class("alert")
@@ -513,7 +513,7 @@ class Battery(Overlay):
         percentage = int(value)
         self.bat_level.set_label(self._format_percentage(percentage))
         self.bat_icon.set_markup(icon)
-        if percentage <= 15:
+        if percentage <= 15 and not charging:
             self.bat_icon.add_style_class("alert")
             self.bat_circle.add_style_class("alert")
         else:
