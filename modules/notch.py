@@ -240,7 +240,8 @@ class Notch(Window):
             self.player_small_visible = False
 
     def close_if_desired(self):
-        if type(self.visible) is Dashboard:
+        if type(self.visible) is Dashboard \
+            and self.dashboard.visible_child is not self.dashboard.kanban:
             self.close_notch()
 
     def on_button_enter(self, widget, event):

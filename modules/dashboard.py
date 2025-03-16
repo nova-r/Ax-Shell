@@ -36,6 +36,7 @@ class Dashboard(Box):
         self.widgets = Widgets(notch=self.notch)
         self.kanban = Kanban()
         self.wallpapers = WallpaperSelector()
+        self.visible_child = self.widgets #only for reading rn
 
         self.stack = Stack(
             name="stack",
@@ -98,6 +99,7 @@ class Dashboard(Box):
 
     def on_visible_child_changed(self, stack, param):
         visible = stack.get_visible_child()
+        self.visible_child = visible
         if visible == self.wallpapers:
             self.wallpapers.search_entry.set_text("")
             self.wallpapers.search_entry.grab_focus()
