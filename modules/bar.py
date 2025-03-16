@@ -13,6 +13,7 @@ import modules.icons as icons
 from modules.metrics import MetricsSmall, Battery
 from modules.controls import ControlSmall
 from modules.weather import Weather
+from modules.vpn import VPNStatus
 
 class Bar(Window):
     def __init__(self, **kwargs):
@@ -42,7 +43,7 @@ class Bar(Window):
 
         self.systray = SystemTray()
         self.weather = Weather()
-        # self.systray = SystemTray(name="systray", spacing=8, icon_size=20)
+        self.vpn_status = VPNStatus()
 
         self.date_time = DateTime(name="date-time", formatters=["%H:%M"], h_align="center", v_align="center")
 
@@ -115,6 +116,7 @@ class Bar(Window):
                 orientation="h",
                 spacing=4,
                 children=[
+                    self.vpn_status,
                     self.weather,
                 ],
             ),

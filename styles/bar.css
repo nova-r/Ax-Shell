@@ -126,3 +126,19 @@ tooltip > * {
 #bar {
   border-radius: 0px;
 }
+
+#vpn-off-button {
+  background-color: var(--shadow);
+  padding: 0 8px;
+  border-radius: 16px;
+}
+
+#vpn-label {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+#vpn-off-button.hidden {
+  opacity: 0;
+  margin: -40px -40px 0px 0px;
+}

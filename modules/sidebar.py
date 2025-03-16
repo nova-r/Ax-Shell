@@ -26,6 +26,8 @@ class SideBar(Window):
             visible=True,
             all_visible=True,
         )
+        self.main_bar = kwargs.get("main_bar", None)
+
         self.aria_provider = AriaProvider()
 
         self.workspaces = Workspaces(
@@ -145,7 +147,8 @@ class SideBar(Window):
 
     def switch_vpn(self):
         # should still be converted to python code
-        exec_shell_command_async("bash /home/kyu/flakes/modules/home-manager/waybar/scripts/switch-vpn.sh && pkill -RTMIN+1 waybar")
+        self.main_bar.vpn_status.vpn_provider.cycle_wireguard_vpn()
+        self.main_bar.vpn_status.update_button()
         
 
     def open_aria(self):

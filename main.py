@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     corners = Corners()
     bar = Bar()
-    sidebar = SideBar()
+    sidebar = SideBar(main_bar=bar)
     notch = Notch()
     dock = Dock() 
     bar.notch = notch
