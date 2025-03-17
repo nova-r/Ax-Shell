@@ -103,3 +103,16 @@ class Dashboard(Box):
         if visible == self.wallpapers:
             self.wallpapers.search_entry.set_text("")
             self.wallpapers.search_entry.grab_focus()
+
+    def go_to_section(self, section_name):
+        """Navigate to a specific section in the dashboard."""
+        if section_name == "widgets":
+            self.stack.set_visible_child(self.widgets)
+        elif section_name == "pins":
+            self.stack.set_visible_child(self.pins)
+        elif section_name == "kanban":
+            self.stack.set_visible_child(self.kanban)
+        elif section_name == "wallpapers":
+            self.stack.set_visible_child(self.wallpapers)
+        elif section_name == "coming-soon":
+            self.stack.set_visible_child(self.coming_soon)

@@ -27,9 +27,15 @@
 #dock-app-button:hover,
 #dock-app-button:hover.instance {
   background-color: var(--surface-bright);
+  padding-top: 3px;
 }
 
 #dock-app-button:active,
 #dock-app-button:active.instance {
   background-color: var(--primary);
+}
+
+#dock-app-button.instance {
+  border-bottom: 1px solid var(--surface);
+  padding: 3px 4px;
 }
