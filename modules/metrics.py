@@ -197,8 +197,6 @@ class Metrics(Box):
         self.ram_usage.value = mem / 100.0
         self.disk_usage.value = disk / 100.0
 
-        self.update_battery(None, shared_battery_provider.get_battery())
-
         return True  # Continue calling this function
 
     def update_battery(self, sender, battery_data):
