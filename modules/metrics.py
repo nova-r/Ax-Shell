@@ -547,7 +547,7 @@ class NetworkApplet(Button):
         )
         self.last_counters = psutil.net_io_counters()
         self.last_time = time.time()
-        invoke_repeater(1000, self.update_network)
+        invoke_repeater(3000, self.update_network)
 
         self.connect("enter-notify-event", self.on_mouse_enter)
         self.connect("leave-notify-event", self.on_mouse_leave)
@@ -561,7 +561,7 @@ class NetworkApplet(Button):
         self.download_label.set_markup(self.format_speed(download_speed))
         self.upload_label.set_markup(self.format_speed(upload_speed))
 
-        self.downloading = (download_speed >= 20e6)
+        self.downloading = (download_speed >= 10e6)
         self.uploading = (upload_speed >= 2e6)
 
         if self.downloading and not self.is_mouse_over:
@@ -596,8 +596,6 @@ class NetworkApplet(Button):
         else:
             self.wifi_label.set_markup(icons.world_off)
             self.set_tooltip_text("Disconnected")
-
-        
 
         self.last_counters = current_counters
         self.last_time = current_time

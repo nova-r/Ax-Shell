@@ -119,8 +119,8 @@ class Bar(Window):
                 spacing=4,
                 children=[
                     self.vpn_status,
-                    self.network,
                     self.weather,
+                    self.network,
                 ],
             ),
         )
