@@ -1,6 +1,7 @@
 import os
 import hashlib
 import shutil
+import requests
 from gi.repository import GdkPixbuf, Gtk, GLib, Gio, Gdk
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
@@ -62,6 +63,7 @@ class WallpaperSelector(Box):
         # Hide text column so only the image is shown
         self.viewport.set_text_column(-1)
         self.viewport.set_item_width(0)
+        self.viewport.set_activate_on_single_click(True)
         self.viewport.connect("item-activated", self.on_wallpaper_selected)
 
         self.scrolled_window = ScrolledWindow(
@@ -80,7 +82,9 @@ class WallpaperSelector(Box):
             on_key_press_event=self.on_search_entry_key_press,
         )
         self.search_entry.props.xalign = 0.5
+        self.search_entry.has_focus = False;
         self.search_entry.connect("focus-out-event", self.on_search_entry_focus_out)
+        self.search_entry.connect("focus-in-event", self.on_search_entry_focus_in)
 
         self.schemes = {
             "scheme-tonal-spot": "Tonal Spot",
@@ -197,6 +201,10 @@ class WallpaperSelector(Box):
         file_name = model[path][1]
         full_path = os.path.join(data.WALLPAPERS_DIR, file_name)
         selected_scheme = self.scheme_dropdown.get_active_id()
+        current_wall = os.path.expanduser(f"~/.current.wall")
+        if os.path.isfile(current_wall):
+            os.remove(current_wall)
+        os.symlink(full_path, current_wall)
         if self.matugen_switcher.get_active():
             # Matugen is enabled: run the normal command.
             exec_shell_command_async(f'matugen image {full_path} -t {selected_scheme}')
@@ -227,6 +235,13 @@ class WallpaperSelector(Box):
             self.move_selection_2d(event.keyval)
             return True
         elif event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
+            if 'https://' in self.search_entry.get_text() or 'http://' in self.search_entry.get_text():
+                img_data = requests.get(self.search_entry.get_text()).content
+                file_path = data.WALLPAPERS_DIR + '/' + self.search_entry.get_text().split('/')[-1]
+                print(file_path)
+                with open(file_path, 'wb') as handler:
+                    handler.write(img_data)
+                return True
             if self.selected_index != -1:
                 path = Gtk.TreePath.new_from_indices([self.selected_index])
                 self.on_wallpaper_selected(self.viewport, path)
@@ -317,9 +332,14 @@ class WallpaperSelector(Box):
 
     @staticmethod
     def _is_image(file_name: str) -> bool:
-        return file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif', '.webp'))
+        return True
+        # return file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif', '.webp'))
 
     def on_search_entry_focus_out(self, widget, event):
+        self.search_entry.has_focus = False;
         if self.get_mapped():
             widget.grab_focus()
         return False
+
+    def on_search_entry_focus_in(self, widget, event):
+        self.search_entry.has_focus = True;

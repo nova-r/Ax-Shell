@@ -1,12 +1,12 @@
-@import url("./styles/colors.css");
+@import url("/home/kyu/.config/matugen/styles/colors.css");
 @import url("./styles/shadows.css");
 @import url("./styles/bar.css");
+@import url("./styles/sidebar.css");
 @import url("./styles/notch.css");
 @import url("./styles/dock.css");
 @import url("./styles/workspaces.css");
 @import url("./styles/dashboard.css");
 @import url("./styles/buttons.css");
-@import url("./styles/pins.css");
 @import url("./styles/kanban.css");
 @import url("./styles/calendar.css");
 @import url("./styles/controls.css");
@@ -20,11 +20,12 @@
 @import url("./styles/power.css");
 @import url("./styles/metrics.css");
 @import url("./styles/tools.css");
+@import url("./styles/corners.css");
 
 * {
   all: unset;
   color: var(--foreground);
   font-size: 11pt;
-  font-family: "Zed Sans";
+  font-family: "Zed Mono";
   border-radius: 16px;
 }

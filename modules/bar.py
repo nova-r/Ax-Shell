@@ -13,6 +13,7 @@ import modules.icons as icons
 from modules.metrics import MetricsSmall, Battery
 from modules.controls import ControlSmall
 from modules.weather import Weather
+from modules.vpn import VPNStatus
 
 class Bar(Window):
     def __init__(self, **kwargs):
@@ -20,7 +21,7 @@ class Bar(Window):
             name="bar",
             layer="top",
             anchor="left top right",
-            margin="-4px -4px -8px -4px",
+            margin="-8px -8px -16px -8px",
             exclusivity="auto",
             visible=True,
             all_visible=True,
@@ -28,15 +29,6 @@ class Bar(Window):
 
         self.notch = kwargs.get("notch", None)
 
-        self.workspaces = Workspaces(
-            name="workspaces",
-            invert_scroll=True,
-            empty_scroll=True,
-            v_align="fill",
-            orientation="h",
-            spacing=10,
-            buttons=[WorkspaceButton(id=i, label="") for i in range(1, 11)],
-        )
         self.button_tools = Button(
             name="button-bar",
             on_clicked=lambda *_: self.tools_menu(),
@@ -51,7 +43,7 @@ class Bar(Window):
 
         self.systray = SystemTray()
         self.weather = Weather()
-        # self.systray = SystemTray(name="systray", spacing=8, icon_size=20)
+        self.vpn_status = VPNStatus()
 
         self.date_time = DateTime(name="date-time", formatters=["%H:%M"], h_align="center", v_align="center")
 
@@ -124,6 +116,7 @@ class Bar(Window):
                 orientation="h",
                 spacing=4,
                 children=[
+                    self.vpn_status,
                     self.weather,
                 ],
             ),
@@ -147,7 +140,6 @@ class Bar(Window):
                 orientation="h",
                 children=[
                     self.button_apps,
-                    Box(name="workspaces-container", children=[self.workspaces]),
                     self.button_overview,
                     self.boxed_revealer_left,
                 ]

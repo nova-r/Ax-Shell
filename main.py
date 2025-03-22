@@ -1,11 +1,16 @@
 import os
-import setproctitle
-
+import shutil
 from fabric import Application
 from fabric.utils import get_relative_path, exec_shell_command_async
+from modules.bar import Bar
+from modules.sidebar import SideBar
+from modules.notch import Notch
+from modules.dock import Dock
+from modules.corners import Corners
+import setproctitle
 
 # Direct import of data module to avoid possible circular imports
-from config.data import APP_NAME, CACHE_DIR, CONFIG_FILE
+from config.data import APP_NAME, CACHE_DIR, CONFIG_FILE, APP_NAME_CAP
 from modules.bar import Bar
 from modules.corners import Corners
 from modules.dock import Dock
@@ -17,9 +22,15 @@ if __name__ == "__main__":
     setproctitle.setproctitle(APP_NAME)
 
     if not os.path.isfile(CONFIG_FILE):
-        exec_shell_command_async(f"python {get_relative_path('../config/config.py')}")
+        exec_shell_command_async(f"python {os.path.expanduser(f"~/.config/Ax-Shell/config/config.py")}")
+
+    current_wall = os.path.expanduser("~/.current.wall")
+    if not os.path.exists(current_wall):
+        shutil.copyfile(os.path.expanduser(f"~/.config/{APP_NAME_CAP}/assets/wallpapers_example/example-1.jpg"), os.path.expanduser(f"~/.current.wall"))
+
     corners = Corners()
     bar = Bar()
+    sidebar = SideBar(main_bar=bar)
     notch = Notch()
     dock = Dock() 
     bar.notch = notch

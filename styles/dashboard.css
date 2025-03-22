@@ -143,6 +143,33 @@
   font-size: 20px;
 }
 
+#battery-usage {
+  background-color: var(--surface);
+}
+
+#battery-usage trough {
+  min-height: 16px;
+}
+
+#battery-usage trough highlight {
+  border-radius: 20px;
+  min-height: 16px;
+  background: linear-gradient(0deg, var(--red) 10%, var(--green) 40%);
+  /* background-color: var(--primary); */
+}
+
+#battery-usage slider {
+  border-radius: 100%;
+  min-width: 16px;
+  min-height: 16px;
+  background-color: transparent;
+}
+
+#battery-label {
+  color: var(--primary);
+  font-size: 20px;
+}
+
 #applet-stack {
   min-width: 420px;
   border-radius: 20px;

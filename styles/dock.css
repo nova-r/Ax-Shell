@@ -1,9 +1,10 @@
 #dock {
-  background-color: var(--shadow);
+  background-color: var(--on-primary);
   padding: 8px;
-  margin: 8px 8px 7px 8px;
-  border-radius: 20px;
+  margin: 8px 8px 0px 8px;
+  border-radius: 20px 20px 0px 0px;
   transition: all 0.25s cubic-bezier(0.5, 0.25, 0, 1);
+  opacity: 0.9;
 }
 
 #dock.occluded {
@@ -20,13 +21,12 @@
 
 #dock-app-button {
   padding: 4px;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 #dock-app-button:hover,
 #dock-app-button:hover.instance {
   background-color: var(--surface-bright);
-  border-top: 1px solid var(--primary);
   padding-top: 3px;
 }
 
@@ -36,8 +36,6 @@
 }
 
 #dock-app-button.instance {
-  background: linear-gradient(to top, transparent, var(--surface-bright));
   border-bottom: 1px solid var(--surface);
-  border-top: 1px solid var(--outline);
   padding: 3px 4px;
 }

@@ -146,7 +146,32 @@ class Metrics(Box):
             ]
         )
 
+        self.battery_usage = Scale(
+            name="battery-usage",
+            value=0.75,
+            orientation='v',
+            inverted=True,
+            v_align='fill',
+            v_expand=True,
+        )
+
+        self.battery_label = Label(
+            name="battery-label",
+            markup=icons.battery,
+        )
+
+        self.battery = Box(
+            name="battery-box",
+            orientation='v',
+            spacing=8,
+            children=[
+                self.battery_usage,
+                self.battery_label,
+            ]
+        )
+
         self.scales = [
+            self.battery,
             self.disk,
             self.ram,
             self.cpu,
@@ -155,6 +180,7 @@ class Metrics(Box):
         self.cpu_usage.set_sensitive(False)
         self.ram_usage.set_sensitive(False)
         self.disk_usage.set_sensitive(False)
+        self.battery_usage.set_sensitive(False)
 
         for x in self.scales:
             self.add(x)
@@ -171,7 +197,23 @@ class Metrics(Box):
         self.ram_usage.value = mem / 100.0
         self.disk_usage.value = disk / 100.0
 
-        return True  # Continue calling this function.
+        return True  # Continue calling this function
+
+    def update_battery(self, sender, battery_data):
+        value, charging, icon = battery_data
+        if value == 0:
+            self.set_visible(False)
+        else:
+            self.set_visible(True)
+            self.battery_usage.value = value / 100.0
+
+        percentage = int(value * 100)
+        self.battery_label.set_markup(icon)
+
+        if percentage <= 15 and not charging:
+            self.battery_label.add_style_class("alert")
+        else:
+            self.battery_label.remove_style_class("alert")
 
 class MetricsSmall(Overlay):
     def __init__(self, **kwargs):
@@ -447,18 +489,26 @@ class Battery(Overlay):
             self.bat_circle.set_value(value / 100)
         percentage = int(value)
         self.bat_level.set_label(self._format_percentage(percentage))
-        if percentage <= 15:
-            self.bat_icon.set_markup(icons.alert)
+        if percentage <= 15 and not charging:
             self.bat_icon.add_style_class("alert")
             self.bat_circle.add_style_class("alert")
         else:
             self.bat_icon.remove_style_class("alert")
             self.bat_circle.remove_style_class("alert")
-            if charging == False:
-                self.bat_icon.set_markup(icons.discharging)
-            elif percentage == 100:
-                self.bat_icon.set_markup(icons.battery)
-            elif charging == True:
-                self.bat_icon.set_markup(icons.charging)
+
+            if charging == True:
+                self.bat_icon.set_markup(icons.battery_charging)
+            elif percentage >= 90:
+                self.bat_icon.set_markup(icons.battery_4)
+            elif percentage >= 50:
+                self.bat_icon.set_markup(icons.battery_3)
+            elif percentage >= 30:
+                self.bat_icon.set_markup(icons.battery_2)
+            elif percentage >= 10:
+                self.bat_icon.set_markup(icons.battery_1)
+            elif percentage < 10:
+                self.bat_icon.set_markup(icons.battery_warning)
             else:
-                self.bat_icon.set_markup(icons.battery)
+                # charging can be None, so this is the fallback
+                self.bat_icon.set_markup(icons.battery_0)
+

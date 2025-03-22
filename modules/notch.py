@@ -1,4 +1,5 @@
 from os import truncate
+from fabric.widgets.eventbox import EventBox
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from fabric.widgets.centerbox import CenterBox
@@ -133,6 +134,9 @@ class Notch(Window):
             ]
         )
 
+        self.stack.connect("notify::visible-child", self.on_visible_child_changed)
+        self.compact_stack.connect("notify::visible-child", self.on_visible_child_changed_compact)
+
         self.corner_left = Box(
             name="notch-corner-left",
             orientation="v",
@@ -157,13 +161,17 @@ class Notch(Window):
 
         self.corner_right.set_margin_end(56)
 
+        self.event_box = EventBox()
+        self.event_box.add(self.stack)
+        self.event_box.connect("leave-notify-event", lambda widget, event: (self.close_if_desired(), False)[1])
+
         self.notch_box = CenterBox(
             name="notch-box",
             orientation="h",
             h_align="center",
             v_align="center",
             # start_children=self.corner_left,
-            center_children=self.stack,
+            center_children=self.event_box,
             # end_children=self.corner_right,
         )
 
@@ -196,6 +204,7 @@ class Notch(Window):
             ]
         )
 
+
         self.notch_complete = Box(
             name="notch-complete",
             orientation="v",
@@ -208,25 +217,48 @@ class Notch(Window):
         self.hidden = False
         self._is_notch_open = False  # Add a flag to track notch open state
         self._scrolling = False
+        self.player_small_visible = False
+        self.visible = False
+        self.force_close = False
 
         self.add(self.notch_complete)
         self.show_all()
 
         self._show_overview_children(False)
 
-        self.add_keybinding("Escape", lambda *_: self.close_notch())
+        self.add_keybinding("Escape", lambda *_: self.force_close_notch())
         self.add_keybinding("Ctrl Tab", lambda *_: self.dashboard.go_to_next_child())
         self.add_keybinding("Ctrl Shift ISO_Left_Tab", lambda *_: self.dashboard.go_to_previous_child())
+
+    def on_visible_child_changed(self, stack, param):
+        self.visible = stack.get_visible_child()
+
+    def on_visible_child_changed_compact(self, stack, param):
+        if type(stack.get_visible_child()) is PlayerSmall:
+            self.player_small_visible = True
+        else:
+            self.player_small_visible = False
+
+    def close_if_desired(self):
+        if type(self.visible) is Dashboard \
+            and self.dashboard.visible_child is not self.dashboard.kanban:
+            self.close_notch()
 
     def on_button_enter(self, widget, event):
         window = widget.get_window()
         if window:
             window.set_cursor(Gdk.Cursor(Gdk.CursorType.HAND2))
+            if not self.force_close and not self._is_notch_open and not self.player_small_visible:
+                self.open_notch("dashboard")
 
     def on_button_leave(self, widget, event):
         window = widget.get_window()
         if window:
             window.set_cursor(None)
+
+    def force_close_notch(self):
+        self.force_close = True
+        self.close_notch()
 
     def close_notch(self):
         self.set_keyboard_mode("none")
@@ -248,6 +280,10 @@ class Notch(Window):
         for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools"]:
             self.stack.remove_style_class(style)
         self.stack.set_visible_child(self.compact)
+        GLib.timeout_add(500, lambda: [self.set_force_close(False)][-1] or False)
+
+    def set_force_close(self, value):
+        self.force_close = value
 
     def open_notch(self, widget):
         # Handle special behavior for "bluetooth"

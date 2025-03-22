@@ -54,7 +54,7 @@ class Corners(Window):
                     children=[
                         MyCorner("bottom-left"),
                         Box(h_expand=True),
-                        MyCorner("bottom-right"),
+                        # MyCorner("bottom-right"),
                     ],
                 ),
             ],

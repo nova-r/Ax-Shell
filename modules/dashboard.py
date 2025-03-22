@@ -14,7 +14,6 @@ from gi.repository import GLib, Gtk, Pango, GdkPixbuf
 import modules.icons as icons
 from modules.buttons import Buttons
 from modules.widgets import Widgets
-from modules.pins import Pins
 from modules.wallpapers import WallpaperSelector
 from modules.kanban import Kanban
 import config.data as data
@@ -35,9 +34,9 @@ class Dashboard(Box):
         self.notch = kwargs["notch"]
 
         self.widgets = Widgets(notch=self.notch)
-        self.pins = Pins()
         self.kanban = Kanban()
         self.wallpapers = WallpaperSelector()
+        self.visible_child = self.widgets #only for reading rn
 
         self.stack = Stack(
             name="stack",
@@ -55,11 +54,6 @@ class Dashboard(Box):
             label="Widgets",
         )
 
-        self.label_2 = Label(
-            name="label-2",
-            label="Pins",
-        )
-
         self.label_3 = Label(
             name="label-3",
             label="Kanban",
@@ -70,57 +64,9 @@ class Dashboard(Box):
             label="Wallpapers",
         )
 
-        # Create the coming_soon labels as attributes for later update
-        self.coming_soon_start_label = Label(
-            name="coming-soon-label",
-            label="I need...",
-            justification="center",
-        )
-        self.coming_soon_end_label = Label(
-            name="coming-soon-label",
-            label="To sleep...",
-            justification="center",
-        )
-
-        self.soon = Image(
-            name="coming-soon",
-            pixbuf=GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                get_relative_path("../assets/soon.png"), 366, 300, True
-            ),
-        )
-
-        self.coming_soon = Box(
-            name="coming-soon",
-            orientation="v",
-            h_align="fill",
-            v_align="fill",
-            h_expand=True,
-            v_expand=True,
-            spacing=8,
-            children=[
-            Box(
-                h_align="center",
-                v_align="fill",
-                h_expand=True,
-                v_expand=True,
-                children=[self.coming_soon_start_label],
-            ),
-            self.soon,
-            Box(
-                h_align="center",
-                v_align="fill",
-                h_expand=True,
-                v_expand=True,
-                children=[self.coming_soon_end_label],
-            ),
-            ],
-        )
-
         self.stack.add_titled(self.widgets, "widgets", "Widgets")
-        self.stack.add_titled(self.pins, "pins", "Pins")
         self.stack.add_titled(self.kanban, "kanban", "Kanban")
         self.stack.add_titled(self.wallpapers, "wallpapers", "Wallpapers")
-        self.stack.add_titled(self.coming_soon, "coming-soon", "Coming soon...")
 
         self.switcher.set_stack(self.stack)
         self.switcher.set_hexpand(True)
@@ -153,35 +99,10 @@ class Dashboard(Box):
 
     def on_visible_child_changed(self, stack, param):
         visible = stack.get_visible_child()
+        self.visible_child = visible
         if visible == self.wallpapers:
             self.wallpapers.search_entry.set_text("")
             self.wallpapers.search_entry.grab_focus()
-        if visible == self.coming_soon:
-            # Define paired messages for the coming_soon widget using tuples
-            text_pairs = (
-                ("I need...", "To sleep..."),
-                ("Another day...", " Another bug..."),
-                ("I really need...", "An energy drink..."),
-                ("7 minutes without ricing...", "TIME TO CODE!"),
-                ("git commit... git p-", "tf is a merge?"),
-                ("This should work...", "Why doesn't it work?"),
-                ("Just one more line...", "8 hours later..."),
-                ("Hello world...", "Segfault."),
-                ("I'll fix that later...", "Technical debt intensifies."),
-                ("sudo rm -rf /", "Wait, NO—"),
-                ("Almost done...", "SyntaxError: unexpected EOF"),
-                ("AI will take our jobs...", "Meanwhile: writing regex."),
-                ("Arch is unstable!", "3 years, no reinstall."),
-                ("printf(\"Hello world\");", "Where is my semicolon?"),
-                ("I'll sleep early today...", "3AM: still debugging."),
-                ("Oh, a tiny bug...", "Refactoring the whole codebase."),
-                ("rm -rf node_modules", "Project reborn."),
-                ("Pipenv, poetry, venv...", "Which one was I using?"),
-            )
-
-            new_start_text, new_end_text = random.choice(text_pairs)
-            self.coming_soon_start_label.set_text(new_start_text)
-            self.coming_soon_end_label.set_text(new_end_text)
 
     def go_to_section(self, section_name):
         """Navigate to a specific section in the dashboard."""

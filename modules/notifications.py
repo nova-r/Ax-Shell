@@ -229,7 +229,6 @@ class NotificationBox(Box):
             max_chars_width=34,
             ellipsization="end",
         ) if notification.body else Box()
-        self.notification_body_label.set_single_line_mode(True) if notification.body else None
         self.notification_text_box = Box(
             name="notification-text",
             orientation="v",
