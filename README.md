@@ -65,6 +65,7 @@ If you want to just run a script and have it work, take a look at the original A
     - setproctitle
     - toml
     - watchdog
+    - thefuzz
 - Fonts:
     - Zed Mono
     - Tabler Icons (included in [assests](https://github.com/HeyImKyu/Ax-Shell/tree/main/assets/fonts/tabler-icons))
