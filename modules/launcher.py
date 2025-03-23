@@ -19,6 +19,7 @@ import subprocess
 from thefuzz import fuzz
 from config.data import FUZZY_THRESHOLD
 from modules.dock import Dock  # Import the Dock class
+import sqlite3
 
 class AppLauncher(Box):
     def __init__(self, **kwargs):
@@ -118,6 +119,8 @@ class AppLauncher(Box):
         self.viewport.children = []
         self.selected_index = -1  # Clear selection when viewport changes
 
+        apps_recent_order = self.get_db_app_order()
+        
         filtered_apps_iter = iter(
             sorted(
                 [
@@ -132,7 +135,21 @@ class AppLauncher(Box):
                         ).casefold(),
                     ) >= FUZZY_THRESHOLD or query == ""
                 ],
-                key=lambda app: (app.display_name or "").casefold(),
+                key=lambda app: (
+                    -(
+                        apps_recent_order.get(app.name, 0) * 1  # Importance (weight = 1)
+                        + fuzz.partial_ratio(  # Fuzzy similarity (weight = 100)
+                            query.casefold(),
+                            (
+                                (app.display_name or "")
+                                + (" " + app.name + " ")
+                                + (app.generic_name or "")
+                            ).casefold(),
+                        )
+                        * 100
+                    ),
+                    (app.display_name or "").casefold(),  # Fallback: sort by display name
+                ),
             )
         )
         should_resize = operator.length_hint(filtered_apps_iter) == len(self._all_apps)
@@ -142,6 +159,49 @@ class AppLauncher(Box):
             filtered_apps_iter,
             pin=True,
         )
+
+    def get_db_app_order(self):
+        db_path = os.path.expanduser(f'~/.cache/ax-shell/recent_apps.db')
+        self.create_db_if_not_exists(db_path)
+
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute('''SELECT * FROM apps order by importance desc''')
+        output = cursor.fetchall() 
+        rtn = {}
+        for row in output: 
+          rtn[row[0]] = row[1]
+
+        return rtn
+
+    def update_db_order(self, app_name):
+        db_path = os.path.expanduser(f'~/.cache/ax-shell/recent_apps.db')
+        self.create_db_if_not_exists(db_path)
+
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        cursor.execute('''SELECT importance FROM apps WHERE name = ?''', (app_name,))
+        result = cursor.fetchone()
+
+        if result is not None:
+            importance = int(result[0]) + 1
+            cursor.execute('''UPDATE apps SET importance = ? WHERE name = ?''', (importance, app_name))
+        else:
+            cursor.execute('''INSERT INTO apps (name, importance) VALUES (?, ?)''', (app_name, 1))
+
+        conn.commit()
+        conn.close()
+
+    def create_db_if_not_exists(self, db_path):
+        if not os.path.exists(db_path):
+            subprocess.call(['touch', db_path])
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute('''CREATE TABLE IF NOT EXISTS apps
+                 (name text, importance int)''')
+            conn.commit()
+            conn.close()
 
     def handle_arrange_complete(self, should_resize, query):
         if should_resize:
@@ -182,7 +242,7 @@ class AppLauncher(Box):
                 ],
             ),
             tooltip_text=app.description,
-            on_clicked=lambda *_: (app.launch(), self.close_launcher()),
+            on_clicked=lambda *_: (app.launch(), self.close_launcher(), self.update_db_order(app.name)),
             **kwargs,
         )
         return button
