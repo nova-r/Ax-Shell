@@ -160,49 +160,6 @@ class AppLauncher(Box):
             pin=True,
         )
 
-    def get_db_app_order(self):
-        db_path = os.path.expanduser(f'~/.cache/ax-shell/recent_apps.db')
-        self.create_db_if_not_exists(db_path)
-
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute('''SELECT * FROM apps order by importance desc''')
-        output = cursor.fetchall() 
-        rtn = {}
-        for row in output: 
-          rtn[row[0]] = row[1]
-
-        return rtn
-
-    def update_db_order(self, app_name):
-        db_path = os.path.expanduser(f'~/.cache/ax-shell/recent_apps.db')
-        self.create_db_if_not_exists(db_path)
-
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-
-        cursor.execute('''SELECT importance FROM apps WHERE name = ?''', (app_name,))
-        result = cursor.fetchone()
-
-        if result is not None:
-            importance = int(result[0]) + 1
-            cursor.execute('''UPDATE apps SET importance = ? WHERE name = ?''', (importance, app_name))
-        else:
-            cursor.execute('''INSERT INTO apps (name, importance) VALUES (?, ?)''', (app_name, 1))
-
-        conn.commit()
-        conn.close()
-
-    def create_db_if_not_exists(self, db_path):
-        if not os.path.exists(db_path):
-            subprocess.call(['touch', db_path])
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-            cursor.execute('''CREATE TABLE IF NOT EXISTS apps
-                 (name text, importance int)''')
-            conn.commit()
-            conn.close()
-
     def handle_arrange_complete(self, should_resize, query):
         if should_resize:
             self.resize_viewport()
@@ -242,10 +199,21 @@ class AppLauncher(Box):
                 ],
             ),
             tooltip_text=app.description,
-            on_clicked=lambda *_: (app.launch(), self.close_launcher(), self.update_db_order(app.name)),
             **kwargs,
         )
+        button.connect(
+            "button-press-event",
+            lambda button, event: self.launch_or_rightclick(app, button, event)
+        )
         return button
+
+    def launch_or_rightclick(self, app, button, event):
+        if event.button == Gdk.BUTTON_PRIMARY:
+            app.launch()
+            self.close_launcher()
+            self.update_db_order(app.name)
+        elif event.button == Gdk.BUTTON_SECONDARY:
+            self.delete_from_history(app.name)
 
     def update_selection(self, new_index: int):
         # Unselect current
@@ -492,3 +460,64 @@ class AppLauncher(Box):
             del self.calc_history[self.selected_index]
             self.save_calc_history()
             self.update_calculator_viewport()
+
+    def get_db_app_order(self):
+        db_path = os.path.expanduser(f'~/.cache/ax-shell/recent_apps.db')
+        self.create_db_if_not_exists(db_path)
+
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute('''SELECT * FROM apps order by importance desc''')
+        output = cursor.fetchall() 
+        rtn = {}
+        for row in output: 
+          rtn[row[0]] = row[1]
+
+        return rtn
+
+    def update_db_order(self, app_name):
+        db_path = os.path.expanduser(f'~/.cache/ax-shell/recent_apps.db')
+        self.create_db_if_not_exists(db_path)
+
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        cursor.execute('''SELECT importance FROM apps WHERE name = ?''', (app_name,))
+        result = cursor.fetchone()
+
+        if result is not None:
+            importance = int(result[0]) + 1
+            cursor.execute('''UPDATE apps SET importance = ? WHERE name = ?''', (importance, app_name))
+        else:
+            cursor.execute('''INSERT INTO apps (name, importance) VALUES (?, ?)''', (app_name, 1))
+
+        conn.commit()
+        conn.close()
+
+    def create_db_if_not_exists(self, db_path):
+        if not os.path.exists(db_path):
+            subprocess.call(['touch', db_path])
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute('''CREATE TABLE IF NOT EXISTS apps
+                 (name text, importance int)''')
+            conn.commit()
+            conn.close()
+
+    def delete_from_history(self, app_name):
+        db_path = os.path.expanduser(f'~/.cache/ax-shell/recent_apps.db')
+        self.create_db_if_not_exists(db_path)
+
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        cursor.execute('''SELECT * FROM apps WHERE name = ?''', (app_name,))
+        result = cursor.fetchone()
+
+        if result is not None:
+            cursor.execute('''DELETE FROM apps WHERE name = ?''', (app_name,))
+
+        conn.commit()
+        conn.close()
+
+        self.arrange_viewport(self.search_entry.get_text())
