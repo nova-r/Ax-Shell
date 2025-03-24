@@ -199,6 +199,7 @@ class AppLauncher(Box):
                 ],
             ),
             tooltip_text=app.description,
+            on_clicked=lambda *_: self.launch_or_rightclick(app, None, None),
             **kwargs,
         )
         button.connect(
@@ -208,7 +209,8 @@ class AppLauncher(Box):
         return button
 
     def launch_or_rightclick(self, app, button, event):
-        if event.button == Gdk.BUTTON_PRIMARY:
+        print (event)
+        if event == None or event.button == Gdk.BUTTON_PRIMARY:
             app.launch()
             self.close_launcher()
             self.update_db_order(app.name)
