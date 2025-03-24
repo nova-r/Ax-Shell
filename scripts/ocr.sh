@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Select area with slurp and capture with grim
-grimblast --freeze save area - | \
-tesseract -l eng - - | wl-copy && \
+# Take a screenshot and perform OCR
+ocr_text=$(grimblast --freeze save area - | tesseract -l eng - - 2>/dev/null)
 
-notify-send -a "Ax-Shell" -i "${full_path}" "OCR Sucess" "Text Copied to Clipboard"
+# Check if OCR was successful
+if [[ -n "$ocr_text" ]]; then
+    echo -n "$ocr_text" | wl-copy
+    notify-send -a "Ax-Shell" "OCR Success" "Text Copied to Clipboard"
+else
+    notify-send -a "Ax-Shell" "OCR Failed" "No text recognized or operation failed"
+fi
