@@ -561,8 +561,8 @@ class NetworkApplet(Button):
         self.download_label.set_markup(self.format_speed(download_speed))
         self.upload_label.set_markup(self.format_speed(upload_speed))
 
-        self.downloading = (download_speed >= 10e6)
-        self.uploading = (upload_speed >= 2e6)
+        self.downloading = (download_speed >= 2e6)
+        self.uploading = (upload_speed >= 1e6)
 
         if self.downloading and not self.is_mouse_over:
             self.download_urgent()
