@@ -10,7 +10,8 @@ from fabric.utils.helpers import exec_shell_command_async
 from gi.repository import Gdk
 from modules.systemtray import SystemTray
 import modules.icons as icons
-from modules.metrics import MetricsSmall, Battery
+import modules.data as data
+from modules.metrics import MetricsSmall, Battery, NetworkApplet
 from modules.controls import ControlSmall
 from modules.weather import Weather
 from modules.vpn import VPNStatus
@@ -44,6 +45,7 @@ class Bar(Window):
         self.systray = SystemTray()
         self.weather = Weather()
         self.vpn_status = VPNStatus()
+        self.network = NetworkApplet()
 
         self.date_time = DateTime(name="date-time", formatters=["%H:%M"], h_align="center", v_align="center")
 
@@ -117,6 +119,7 @@ class Bar(Window):
                 spacing=4,
                 children=[
                     self.vpn_status,
+                    self.network,
                     self.weather,
                 ],
             ),
