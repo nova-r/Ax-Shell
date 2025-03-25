@@ -91,10 +91,11 @@
 
 #notch-corner-left {
   margin-left: -16px;
+  margin-top: 12px;
 }
 
 #notch-corner-right {
-  margin-right: -16px;
+  margin-top: 12px;
 }
 
 #compact-mpris-icon-label {
