@@ -1,3 +1,4 @@
 {
-  "wallpapers_dir": "/home/kyu/.wallpapers"
+  "wallpapers_dir": "/home/kyu/.wallpapers",
+  "clipboard_file": "/home/kyu/.cache/wl-clipboard-history/clipboard.db"
 }

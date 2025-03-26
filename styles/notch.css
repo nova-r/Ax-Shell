@@ -26,6 +26,13 @@
   border-radius: 0 0 36px 36px;
 }
 
+#notch-content.clipboard {
+  padding: 4px 16px 16px 16px;
+  min-height: 220px;
+  min-width: 480px;
+  border-radius: 0 0 36px 36px;
+}
+
 #notch-content.dashboard {
   padding: 4px 16px 16px 16px;
   min-height: 450px;
@@ -65,7 +72,8 @@
 #overview,
 #emoji,
 #power-menu,
-#toolbox {
+#toolbox, 
+#clipboard {
   opacity: 1;
   margin: -800px;
   transition: all 0.25s cubic-bezier(0.5, 0.25, 0, 1);
@@ -78,7 +86,8 @@
 #emoji.open,
 #power-menu.open,
 #toolbox.open,
-#bluetooth.open {
+#bluetooth.open, 
+#clipboard.open {
   opacity: 1;
   margin: 0px;
 }

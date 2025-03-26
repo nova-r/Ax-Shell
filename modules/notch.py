@@ -17,6 +17,7 @@ from modules.notifications import NotificationContainer
 from modules.power import PowerMenu
 from modules.overview import Overview
 from modules.emoji import EmojiPicker
+from modules.clipboard import Clipboard
 from modules.corners import MyCorner
 import modules.icons as icons
 import config.data as data
@@ -49,6 +50,7 @@ class Notch(Window):
         self.overview = Overview()
         self.emoji = EmojiPicker(notch=self)
         self.power = PowerMenu(notch=self)
+        self.clipboard = Clipboard(notch=self)
 
         self.applet_stack = self.dashboard.widgets.applet_stack
         self.nhistory = self.applet_stack.get_children()[0]
@@ -131,6 +133,7 @@ class Notch(Window):
                 self.emoji,
                 self.power,
                 self.tools,
+                self.clipboard,
             ]
         )
 
@@ -275,9 +278,9 @@ class Notch(Window):
             self.notch_box.remove_style_class("hideshow")
             self.notch_box.add_style_class("hidden")
 
-        for widget in [self.launcher, self.dashboard, self.notification, self.overview, self.emoji, self.power, self.tools]:
+        for widget in [self.launcher, self.dashboard, self.notification, self.overview, self.emoji, self.power, self.tools, self.clipboard]:
             widget.remove_style_class("open")
-        for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools"]:
+        for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools", "clipboard"]:
             self.stack.remove_style_class(style)
         self.stack.set_visible_child(self.compact)
         GLib.timeout_add(500, lambda: [self.set_force_close(False)][-1] or False)
@@ -313,9 +316,9 @@ class Notch(Window):
                     self.notch_box.remove_style_class("hidden")
                     self.notch_box.add_style_class("hideshow")
 
-                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools"]:
+                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools", "clipboard"]:
                     self.stack.remove_style_class(style)
-                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools]:
+                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools, self.clipboard]:
                     w.remove_style_class("open")
 
                 self.stack.add_style_class("dashboard")
@@ -352,9 +355,9 @@ class Notch(Window):
                     self.notch_box.remove_style_class("hidden")
                     self.notch_box.add_style_class("hideshow")
 
-                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools"]:
+                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools", "clipboard"]:
                     self.stack.remove_style_class(style)
-                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools]:
+                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools, self.clipboard]:
                     w.remove_style_class("open")
 
                 self.stack.add_style_class("dashboard")
@@ -386,9 +389,9 @@ class Notch(Window):
                     self.notch_box.remove_style_class("hidden")
                     self.notch_box.add_style_class("hideshow")
 
-                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools"]:
+                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools", "clipboard"]:
                     self.stack.remove_style_class(style)
-                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools]:
+                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools, self.clipboard]:
                     w.remove_style_class("open")
 
                 self.stack.add_style_class("dashboard")
@@ -417,9 +420,9 @@ class Notch(Window):
                     self.notch_box.remove_style_class("hidden")
                     self.notch_box.add_style_class("hideshow")
 
-                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools"]:
+                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools", "clipboard"]:
                     self.stack.remove_style_class(style)
-                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools]:
+                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools, self.clipboard]:
                     w.remove_style_class("open")
 
                 self.stack.add_style_class("dashboard")
@@ -448,9 +451,9 @@ class Notch(Window):
                     self.notch_box.remove_style_class("hidden")
                     self.notch_box.add_style_class("hideshow")
 
-                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools"]:
+                for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools", "clipboard"]:
                     self.stack.remove_style_class(style)
-                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools]:
+                for w in [self.launcher, self.dashboard, self.overview, self.emoji, self.power, self.tools, self.clipboard]:
                     w.remove_style_class("open")
 
                 self.stack.add_style_class("dashboard")
@@ -473,6 +476,7 @@ class Notch(Window):
             "power": self.power,
             "tools": self.tools,
             "dashboard": self.dashboard, # Add dashboard here to ensure its style class is removed
+            "clipboard": self.clipboard,
         }
         target_widget = widgets.get(widget, self.dashboard)
         # If already showing the requested widget, close the notch.
@@ -508,6 +512,11 @@ class Notch(Window):
                 self.emoji.open_picker()
                 self.emoji.search_entry.set_text("")
                 self.emoji.search_entry.grab_focus()
+
+            if widget == "clipboard":
+                self.clipboard.open_clipboard()
+                self.clipboard.search_entry.set_text("")
+                self.clipboard.search_entry.grab_focus()
 
             if widget == "overview":
                 GLib.timeout_add(300, self._show_overview_children, True)

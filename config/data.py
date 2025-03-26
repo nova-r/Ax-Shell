@@ -34,3 +34,11 @@ else:
     WALLPAPERS_DIR = WALLPAPERS_DIR_DEFAULT
 
 FUZZY_THRESHOLD = 65
+
+CLIPBOARD_FILE_DEFAULT = os.path.expanduser(f'~/.cache/{APP_NAME}/clipboard.db')
+if os.path.exists(CONFIG_FILE):
+    with open(CONFIG_FILE, 'r') as f:
+        config = json.load(f)
+    CLIPBOARD_FILE = config.get('clipboard_file', CLIPBOARD_FILE_DEFAULT)
+else:
+    CLIPBOARD_FILE = WALLPAPERS_DIR_DEFAULT

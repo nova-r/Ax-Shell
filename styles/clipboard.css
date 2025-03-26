@@ -1,0 +1,96 @@
+#search-entry,
+#search-entry-walls {
+  font-weight: bold;
+  background-color: var(--surface);
+  color: var(--foreground);
+  border-radius: 16px;
+  padding: 10px;
+}
+
+#search-entry selection,
+#search-entry-walls selection {
+  color: var(--background);
+  background-color: var(--primary);
+}
+
+#close-button {
+  background-color: var(--surface);
+  border-radius: 16px;
+  padding: 8px;
+}
+
+#close-button:hover,
+#close-button:focus {
+  background-color: var(--surface-bright);
+}
+
+#close-button:active {
+  background-color: var(--red-dim);
+}
+
+#close-label {
+  color: var(--red-dim);
+  font-size: 24px;
+}
+
+#scrolled-window {
+  border-radius: 16px;
+}
+
+#scrolled-window scrollbar {
+  border-radius: 10px;
+  background-color: var(--surface);
+  padding: 4px;
+  margin-left: 6px;
+}
+
+#scrolled-window slider {
+  border-radius: 8px;
+  min-width: 16px;
+  min-height: 48px;
+  background-color: var(--primary);
+}
+
+#clipboard-entry-slot-button {
+  border-radius: 16px;
+  padding: 16px;
+  transition: padding 0.1s ease;
+  animation: loadSlot 0.5s ease;
+}
+
+@keyframes loadSlot {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#clipboard-entry-slot-button:hover,
+#clipboard-entry-slot-button:focus,
+#clipboard-entry-slot-button:selected,
+#clipboard-entry-slot-button.selected {
+  background-color: var(--surface-bright);
+  padding-left: 20px;
+}
+
+#clipboard-entry-slot-button:active {
+  background-color: var(--primary);
+}
+
+#clipboard-entry-label {
+  color: var(--foreground);
+  font-weight: bold;
+}
+
+#clipboard-entry-label:hover #clipboard-entry-label,
+#clipboard-entry-label:focus #clipboard-entry-label,
+#clipboard-entry-label:selected #clipboard-entry-label,
+#clipboard-entry-label.selected #clipboard-entry-label {
+  color: var(--primary);
+}
+
+#clipboard-entry-label:active #clipboard-entry-label {
+  color: var(--shadow);
+}
