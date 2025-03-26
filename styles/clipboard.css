@@ -54,14 +54,16 @@
 #clipboard-entry-slot-button {
   border-radius: 16px;
   padding: 16px;
-  transition: padding 0.1s ease;
+  transition: margin 0.1s ease;
   animation: loadSlot 0.5s ease;
+  border-left: 1px solid var(--primary);
 }
 
 @keyframes loadSlot {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -72,7 +74,7 @@
 #clipboard-entry-slot-button:selected,
 #clipboard-entry-slot-button.selected {
   background-color: var(--surface-bright);
-  padding-left: 20px;
+  margin-left: 8px;
 }
 
 #clipboard-entry-slot-button:active {

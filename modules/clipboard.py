@@ -45,7 +45,7 @@ class Clipboard(Box):
             name="scrolled-window",
             spacing=10,
             min_content_size=(450, 105),
-            max_content_size=(450, 105),
+            max_content_size=(450, 705),
             child=self.viewport,
         )
 
