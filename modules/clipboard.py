@@ -90,7 +90,7 @@ class Clipboard(Box):
 
         conn = sqlite3.connect(CLIPBOARD_FILE)
         cursor = conn.cursor()
-        cursor.execute('''SELECT id, contents FROM c LIMIT 20''')
+        cursor.execute('''SELECT id, contents FROM c ORDER BY id DESC LIMIT 20''')
 
         rtn = []
         for _ in range(20):
@@ -129,7 +129,7 @@ class Clipboard(Box):
                     query.casefold(), value.casefold()
                 ) >= FUZZY_THRESHOLD or query == ""
             ],
-            key=lambda e: e[0]
+            key=lambda e: -(e[0])
         )
         
         self._sorted_filtered_clipboard_entries = filtered_sorted        
