@@ -113,7 +113,6 @@ class Clipboard(Box):
         self.notch.close_notch()
 
     def open_clipboard(self):
-        self._all_clipboard_entries = self.get_clipboard_history()
         self.arrange_viewport()
 
     def arrange_viewport(self, query: str = ""):
