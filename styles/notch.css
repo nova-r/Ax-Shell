@@ -20,7 +20,7 @@
 }
 
 #notch-content.launcher {
-  padding: 4px 16px 16px 16px;
+  padding: 16px;
   min-height: 220px;
   min-width: 480px;
   border-radius: 0 0 36px 36px;
@@ -34,14 +34,14 @@
 }
 
 #notch-content.dashboard {
-  padding: 4px 16px 16px 16px;
+  padding: 16px;
   min-height: 450px;
   min-width: 1070px;
   border-radius: 0 0 36px 36px;
 }
 
 #notch-content.overview {
-  padding: 4px 16px 16px 16px;
+  padding: 16px;
   @apply overview_width();
   @apply overview_height();
   border-radius: 0 0 36px 36px;
@@ -54,7 +54,7 @@
 }
 
 #notch-content.emoji {
-  padding: 4px 16px 16px 16px;
+  padding: 16px;
   min-height: 238px;
   min-width: 574px;
   border-radius: 0 0 36px 36px;
@@ -95,7 +95,7 @@
 #notch-compact {
   font-weight: bold;
   transition: all 0.5s cubic-bezier(0.5, 0.25, 0, 1.25);
-  padding: 4px;
+  padding: 10px;
 }
 
 #notch-corner-left {
