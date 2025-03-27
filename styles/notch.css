@@ -100,11 +100,10 @@
 
 #notch-corner-left {
   margin-left: -16px;
-  margin-top: 12px;
 }
 
 #notch-corner-right {
-  margin-top: 12px;
+  margin-right: -16px;
 }
 
 #compact-mpris-icon-label {
