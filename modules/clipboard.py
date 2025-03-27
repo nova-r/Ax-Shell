@@ -14,7 +14,6 @@ import subprocess
 from thefuzz import fuzz
 from config.data import FUZZY_THRESHOLD
 import sqlite3
-import chardet
 
 class Clipboard(Box):
     def __init__(self, **kwargs):
