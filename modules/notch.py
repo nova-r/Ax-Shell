@@ -1,5 +1,4 @@
 from os import truncate
-from fabric.widgets.eventbox import EventBox
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from fabric.widgets.centerbox import CenterBox
@@ -137,8 +136,6 @@ class Notch(Window):
             ]
         )
 
-        
-
         self.corner_left = Box(
             name="notch-corner-left",
             orientation="v",
@@ -202,17 +199,12 @@ class Notch(Window):
             ]
         )
 
-        self.event_box = EventBox()
-        self.event_box.add(self.notch_overlay)
-        self.event_box.connect("leave-notify-event", lambda widget, event: (self.close_notch(), False)[1])
-
         self.notch_complete = Box(
             name="notch-complete",
             orientation="v",
             children=[
                 self.notch_overlay,
                 self.boxed_notification_revealer,
-                self.event_box,
             ]
         )
 
@@ -225,7 +217,7 @@ class Notch(Window):
 
         self._show_overview_children(False)
 
-        self.add_keybinding("Escape", lambda *_: self.force_close_notch())
+        self.add_keybinding("Escape", lambda *_: self.close_notch())
         self.add_keybinding("Ctrl Tab", lambda *_: self.dashboard.go_to_next_child())
         self.add_keybinding("Ctrl Shift ISO_Left_Tab", lambda *_: self.dashboard.go_to_previous_child())
 
@@ -233,17 +225,11 @@ class Notch(Window):
         window = widget.get_window()
         if window:
             window.set_cursor(Gdk.Cursor(Gdk.CursorType.HAND2))
-            if not self.force_close:
-                self.open_notch("dashboard")
 
     def on_button_leave(self, widget, event):
         window = widget.get_window()
         if window:
             window.set_cursor(None)
-
-    def force_close_notch(self):
-        self.force_close = True
-        self.close_notch()
 
     def close_notch(self):
         self.set_keyboard_mode("none")
@@ -265,10 +251,6 @@ class Notch(Window):
         for style in ["launcher", "dashboard", "notification", "overview", "emoji", "power", "tools", "clipboard"]:
             self.stack.remove_style_class(style)
         self.stack.set_visible_child(self.compact)
-        GLib.timeout_add(500, lambda: [self.set_force_close(False)][-1] or False)
-
-    def set_force_close(self, value):
-        self.force_close = value
 
     def open_notch(self, widget):
         # Handle special behavior for "bluetooth"
