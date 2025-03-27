@@ -22,7 +22,7 @@ class Bar(Window):
             name="bar",
             layer="top",
             anchor="left top right",
-            margin="-8px -8px -8px -8px",
+            margin="-4px -4px -8px -4px",
             exclusivity="auto",
             visible=True,
             all_visible=True,
