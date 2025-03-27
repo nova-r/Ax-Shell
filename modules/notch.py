@@ -38,6 +38,9 @@ class Notch(Window):
             all_visible=True,
         )
 
+        self.visible = False
+        self.force_close = False
+        
         self.bar = kwargs.get("bar", None)
 
         # Primero inicializamos NotificationContainer
@@ -138,8 +141,6 @@ class Notch(Window):
         )
 
         self.stack.connect("notify::visible-child", self.on_visible_child_changed)
-        self.compact_stack.connect("notify::visible-child", self.on_visible_child_changed_compact)
-
         self.corner_left = Box(
             name="notch-corner-left",
             orientation="v",
@@ -220,9 +221,6 @@ class Notch(Window):
         self.hidden = False
         self._is_notch_open = False  # Add a flag to track notch open state
         self._scrolling = False
-        self.player_small_visible = False
-        self.visible = False
-        self.force_close = False
 
         self.add(self.notch_complete)
         self.show_all()
@@ -236,22 +234,15 @@ class Notch(Window):
     def on_visible_child_changed(self, stack, param):
         self.visible = stack.get_visible_child()
 
-    def on_visible_child_changed_compact(self, stack, param):
-        if type(stack.get_visible_child()) is PlayerSmall:
-            self.player_small_visible = True
-        else:
-            self.player_small_visible = False
-
     def close_if_desired(self):
-        if type(self.visible) is Dashboard \
-            and self.dashboard.visible_child is not self.dashboard.kanban:
+        if type(self.visible) is Dashboard:
             self.close_notch()
 
     def on_button_enter(self, widget, event):
         window = widget.get_window()
         if window:
             window.set_cursor(Gdk.Cursor(Gdk.CursorType.HAND2))
-            if not self.force_close and not self._is_notch_open and not self.player_small_visible:
+            if not self.force_close and not self._is_notch_open:
                 self.open_notch("dashboard")
 
     def on_button_leave(self, widget, event):
