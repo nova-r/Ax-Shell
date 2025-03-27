@@ -26,6 +26,7 @@ menu > menuitem > label,
   background-color: var(--shadow);
   padding: 0 8px;
   border-radius: 16px;
+  /*margin-top: 4px;*/
 }
 
 #weather-label {
@@ -36,6 +37,7 @@ menu > menuitem > label,
   background-color: var(--shadow);
   padding: 8px;
   border-radius: 16px;
+  /*margin-top: 4px;*/
 }
 
 menu {
@@ -84,6 +86,7 @@ tooltip > * {
   padding: 4px;
   min-width: 28px;
   min-height: 28px;
+  /*margin-top: 4px;*/
   border-radius: 16px;
   background-color: var(--shadow);
   transition: all 0.1s ease;
@@ -125,20 +128,4 @@ tooltip > * {
 #notch,
 #bar {
   border-radius: 0px;
-}
-
-#vpn-off-button {
-  background-color: var(--shadow);
-  padding: 0 8px;
-  border-radius: 16px;
-}
-
-#vpn-label {
-  color: var(--primary);
-  font-weight: bold;
-}
-
-#vpn-off-button.hidden {
-  opacity: 0;
-  margin: -40px -40px 0px 0px;
 }

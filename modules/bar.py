@@ -22,7 +22,7 @@ class Bar(Window):
             name="bar",
             layer="top",
             anchor="left top right",
-            margin="-8px -8px -16px -8px",
+            margin="-8px -8px -8px -8px",
             exclusivity="auto",
             visible=True,
             all_visible=True,
@@ -30,6 +30,15 @@ class Bar(Window):
 
         self.notch = kwargs.get("notch", None)
 
+        self.workspaces = Workspaces(
+            name="workspaces",
+            invert_scroll=True,
+            empty_scroll=True,
+            v_align="fill",
+            orientation="h",
+            spacing=10,
+            buttons=[WorkspaceButton(id=i, label="") for i in range(1, 11)],
+        )
         self.button_tools = Button(
             name="button-bar",
             on_clicked=lambda *_: self.tools_menu(),
@@ -143,6 +152,7 @@ class Bar(Window):
                 orientation="h",
                 children=[
                     self.button_apps,
+                    Box(name="workspaces-container", children=[self.workspaces]),
                     self.button_overview,
                     self.boxed_revealer_left,
                 ]

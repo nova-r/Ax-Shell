@@ -4,6 +4,7 @@
 
 #workspaces-container {
   background-color: var(--shadow);
+  /*margin-top: 4px;*/
 }
 
 #workspaces > button {
@@ -22,27 +23,13 @@
   background-color: var(--foreground);
 }
 
-@keyframes blink-bg {
-  0% {
-    background-color: var(--error);
-  }
-
-  50% {
-    background-color: transparent;
-  }
-
-  100% {
-    background-color: var(--error);
-  }
-}
-
 #workspaces > button.urgent {
-  animation: blink-bg 1s infinite;
+  background-color: var(--error_dim);
 }
 
 #workspaces > button.active {
-  min-height: 48px;
-  min-width: 8px;
+  min-width: 48px;
+  min-height: 8px;
   background-color: var(--primary);
 }
 

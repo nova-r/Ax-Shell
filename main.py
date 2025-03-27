@@ -3,7 +3,6 @@ import os
 from fabric import Application
 from fabric.utils import get_relative_path, exec_shell_command_async
 from modules.bar import Bar
-from modules.sidebar import SideBar
 from modules.notch import Notch
 from modules.dock import Dock
 from modules.corners import Corners
@@ -23,7 +22,6 @@ if __name__ == "__main__":
 
     corners = Corners()
     bar = Bar()
-    sidebar = SideBar(main_bar=bar)
     notch = Notch()
     dock = Dock() 
     bar.notch = notch
